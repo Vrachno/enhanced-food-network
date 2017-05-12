@@ -11,6 +11,8 @@ tools:context="gr.academic.city.sdmd.foodnetwork.ui.activity.MainActivity">
     layout="@layout/app_bar"
     />
 
+
+
 <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"

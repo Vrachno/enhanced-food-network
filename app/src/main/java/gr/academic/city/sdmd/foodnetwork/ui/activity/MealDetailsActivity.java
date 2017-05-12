@@ -9,6 +9,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -21,15 +24,17 @@ import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 /**
  * Created by trumpets on 4/13/16.
  */
-public class MealDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MealDetailsActivity extends ToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String EXTRA_MEAL_ID = "meal_id";
+    private static final String EXTRA_MEAL_NAME = "meal_name";
 
     private static final int MEAL_LOADER = 20;
 
-    public static Intent getStartIntent(Context context, long mealId) {
+    public static Intent getStartIntent(Context context, long mealId, String mealName) {
         Intent intent = new Intent(context, MealDetailsActivity.class);
         intent.putExtra(EXTRA_MEAL_ID, mealId);
+        intent.putExtra(EXTRA_MEAL_NAME, mealName);
 
         return intent;
     }
@@ -48,8 +53,6 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_meal_details);
-
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
 
         tvTitle = (TextView) findViewById(R.id.tv_meal_title);
@@ -59,6 +62,16 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         tvCreationDate = (TextView) findViewById(R.id.tv_meal_creation_date);
 
         getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_meal_details;
+    }
+
+    @Override
+    protected String getCustomTitle() {
+        return getIntent().getStringExtra(EXTRA_MEAL_NAME).toUpperCase();
     }
 
     @Override
@@ -99,10 +112,27 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
 
             tvPrepTime.setText(getString(R.string.prep_time_w_placeholder, prepTimeHour, prepTimeMinute));
             tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
+
         }
 
         if (cursor != null) {
             cursor.close();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_meal_details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_upvote:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

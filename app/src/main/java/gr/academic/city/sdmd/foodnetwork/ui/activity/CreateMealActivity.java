@@ -4,7 +4,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,7 +20,7 @@ import gr.academic.city.sdmd.foodnetwork.service.MealService;
 /**
  * Created by trumpets on 4/13/16.
  */
-public class CreateMealActivity extends AppCompatActivity {
+public class CreateMealActivity extends ToolbarActivity {
 
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
 
@@ -39,10 +41,11 @@ public class CreateMealActivity extends AppCompatActivity {
     private int prepTimeHour;
     private int prepTimeMinute;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_meal);
 
         mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
 
@@ -80,6 +83,16 @@ public class CreateMealActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_create_meal;
+    }
+
+    @Override
+    protected String getCustomTitle() {
+        return getResources().getString(R.string.create_meal_title) ;
     }
 
     private void saveNewMeal() {

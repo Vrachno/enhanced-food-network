@@ -7,14 +7,4 @@
     android:theme="@style/ThemeOverlay.AppCompat.Light"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
 
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:layout_marginRight="35dp"
-        android:src="@drawable/ic_app_bar_icon"
-        />
-
 </android.support.v7.widget.Toolbar>
