@@ -19,6 +19,9 @@ public class Meal {
     @SerializedName("title")
     private String title;
 
+    @SerializedName("preview")
+    private String preview;
+
     @SerializedName("recipe")
     private String recipe;
 
@@ -43,8 +46,9 @@ public class Meal {
     public Meal() {
     }
 
-    public Meal(String title, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute, long mealTypeServerId) {
+    public Meal(String title, String preview, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute, long mealTypeServerId) {
         this.title = title;
+        this.preview = preview;
         this.recipe = recipe;
         this.numberOfServings = numberOfServings;
         this.prepTimeHour = prepTimeHour;
@@ -58,6 +62,7 @@ public class Meal {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(FoodNetworkContract.Meal.COLUMN_TITLE, title);
+        contentValues.put(FoodNetworkContract.Meal.COLUMN_PREVIEW, preview);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_RECIPE, recipe);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS, numberOfServings);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR, prepTimeHour);
