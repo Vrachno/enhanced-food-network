@@ -20,7 +20,7 @@ import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.service.MealTypeService;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String[] PROJECTION = {
             FoodNetworkContract.MealType._ID,
@@ -42,16 +42,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
+
 
         adapter = new SimpleCursorAdapter(this, R.layout.item_meal_type, null, FROM_COLUMNS, TO_IDS, 0);
 
@@ -71,12 +66,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Cursor cursor = adapter.getCursor();
                 if (cursor.moveToPosition(position)) {
                     startActivity(MealsActivity.getStartIntent(MainActivity.this,
-                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.MealType.COLUMN_SERVER_ID))));
+                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.MealType.COLUMN_SERVER_ID)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.MealType.COLUMN_NAME))));
                 }
             }
         });
 
         getSupportLoaderManager().initLoader(MEAL_TYPES_LOADER, null, this);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected String getCustomTitle() {
+        return getResources().getString(R.string.app_name);
     }
 
     @Override

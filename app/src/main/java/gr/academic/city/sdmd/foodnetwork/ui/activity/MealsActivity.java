@@ -12,6 +12,9 @@ import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,9 +27,10 @@ import gr.academic.city.sdmd.foodnetwork.service.MealService;
 /**
  * Created by trumpets on 4/24/17.
  */
-public class MealsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MealsActivity extends ToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
+    private static final String EXTRA_MEAL_TYPE_NAME = "meal_type_title";
 
     private static final String[] PROJECTION = {
             FoodNetworkContract.Meal._ID,
@@ -47,9 +51,10 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
             R.id.tv_meal_title,
             R.id.tv_meal_prep_time};
 
-    public static Intent getStartIntent(Context context, long mealTypeServerId) {
+    public static Intent getStartIntent(Context context, long mealTypeServerId, String mealTypeTitle) {
         Intent intent = new Intent(context, MealsActivity.class);
         intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
+        intent.putExtra(EXTRA_MEAL_TYPE_NAME, mealTypeTitle);
 
         return intent;
     }
@@ -62,7 +67,6 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meals);
 
         this.mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
 
@@ -98,20 +102,28 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
         resultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(MealDetailsActivity.getStartIntent(MealsActivity.this, id));
-            }
-        });
-
-        findViewById(R.id.btn_add_meal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(CreateMealActivity.getStartIntent(MealsActivity.this, mealTypeServerId));
+                Cursor cursor = adapter.getCursor();
+                if (cursor.moveToPosition(position)) {
+                    startActivity(MealDetailsActivity.getStartIntent(MealsActivity.this,
+                            id,
+                            cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE))));
+                }
             }
         });
 
         getSupportLoaderManager().initLoader(MEALS_LOADER, null, this);
 
         MealService.startFetchMeals(this, mealTypeServerId);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_meals;
+    }
+
+    @Override
+    protected String getCustomTitle() {
+        return getResources().getString(R.string.food_category) + " " + getIntent().getStringExtra(EXTRA_MEAL_TYPE_NAME).toUpperCase();
     }
 
     @Override
@@ -167,6 +179,23 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
         @Override
         protected void onPostExecute(Void aVoid) {
             swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_meals_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_meal:
+                startActivity(CreateMealActivity.getStartIntent(MealsActivity.this, mealTypeServerId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

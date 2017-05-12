@@ -25,15 +25,30 @@
         <activity
             android:name=".ui.activity.MealsActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity" />
+        </activity>
 
         <activity
             android:name=".ui.activity.CreateMealActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.activity.MealsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MealsActivity" />
+        </activity>
 
         <activity
             android:name=".ui.activity.MealDetailsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.activity.MealsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MealsActivity" />
+        </activity>
 
         <service
             android:name=".service.MealTypeService"
