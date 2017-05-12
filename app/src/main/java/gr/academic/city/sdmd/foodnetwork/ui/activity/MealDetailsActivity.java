@@ -4,16 +4,22 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,6 +48,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     private long mealId;
 
     private TextView tvTitle;
+    private ImageView ivPreview;
     private TextView tvRecipe;
     private TextView tvNumberOfServings;
     private TextView tvPrepTime;
@@ -56,6 +63,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
 
         tvTitle = (TextView) findViewById(R.id.tv_meal_title);
+        ivPreview = (ImageView) findViewById(R.id.iv_meal_preview);
         tvRecipe = (TextView) findViewById(R.id.tv_meal_recipe);
         tvNumberOfServings = (TextView) findViewById(R.id.tv_number_of_servings);
         tvPrepTime = (TextView) findViewById(R.id.tv_prep_time);
@@ -113,6 +121,10 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
             tvPrepTime.setText(getString(R.string.prep_time_w_placeholder, prepTimeHour, prepTimeMinute));
             tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
 
+            String preview = cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREVIEW));
+            LoadImageFromURL loadImage = new LoadImageFromURL();
+            loadImage.execute(preview);
+
         }
 
         if (cursor != null) {
@@ -135,4 +147,36 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap>{
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                InputStream is = url.openConnection().getInputStream();
+                Bitmap bitMap = BitmapFactory.decodeStream(is);
+                return bitMap;
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            ivPreview.setImageBitmap(result);
+        }
+
+    }
 }
+
+

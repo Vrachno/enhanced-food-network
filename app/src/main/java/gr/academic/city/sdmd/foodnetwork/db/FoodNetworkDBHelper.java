@@ -30,6 +30,7 @@ public class FoodNetworkDBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + FoodNetworkContract.Meal.TABLE_NAME + " (" +
                     FoodNetworkContract.Meal._ID + INT_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     FoodNetworkContract.Meal.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                    FoodNetworkContract.Meal.COLUMN_PREVIEW + TEXT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_RECIPE + TEXT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS + INT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR + INT_TYPE + COMMA_SEP +

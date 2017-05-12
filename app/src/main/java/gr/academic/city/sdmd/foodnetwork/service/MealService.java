@@ -26,6 +26,7 @@ public class MealService extends IntentService {
 
     private static final String ACTION_CREATE_MEAL = "gr.academic.city.sdmd.foodnetwork.CREATE_MEAL";
     private static final String EXTRA_TITLE = "title";
+    private static final String EXTRA_PREVIEW = "preview";
     private static final String EXTRA_RECIPE = "recipe";
     private static final String EXTRA_NUMBER_OF_SERVINGS = "number_of_servings";
     private static final String EXTRA_PREP_TIME_HOUR = "prep_time_hour";
@@ -97,12 +98,13 @@ public class MealService extends IntentService {
     private void createMeal(Intent intent) {
         long mealTypeServerId = intent.getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
         String title = intent.getStringExtra(EXTRA_TITLE);
+        String preview = intent.getStringExtra(EXTRA_PREVIEW);
         String recipe = intent.getStringExtra(EXTRA_RECIPE);
         int numberOfServings = intent.getIntExtra(EXTRA_NUMBER_OF_SERVINGS, -1);
         int prepTimeHour = intent.getIntExtra(EXTRA_PREP_TIME_HOUR, -1);
         int prepTimeMinute = intent.getIntExtra(EXTRA_PREP_TIME_MINUTE, -1);
 
-        ContentValues contentValues = new Meal(title, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId).toContentValues();
+        ContentValues contentValues = new Meal(title, preview, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId).toContentValues();
         contentValues.put(FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER, 0);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, -1);
 

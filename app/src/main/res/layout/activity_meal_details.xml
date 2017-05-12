@@ -38,11 +38,17 @@
             android:textSize="20sp"
             tools:text="Pasta Pesto"/>
 
+        <ImageView
+            android:id="@+id/iv_meal_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_meal_title"/>
+
         <TextView
             android:id="@+id/tv_meal_recipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_meal_title"
+            android:layout_below="@id/iv_meal_preview"
             android:layout_marginTop="10dp"
             android:padding="5dp"
             tools:text="Just order in, it's easier."/>
