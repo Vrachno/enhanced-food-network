@@ -5,12 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"
+        />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_add_meal"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/app_bar">
 
         <ListView
             android:id="@android:id/list"

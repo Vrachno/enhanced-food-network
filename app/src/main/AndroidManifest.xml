@@ -24,6 +24,7 @@
 
         <activity
             android:name=".ui.activity.MealsActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
         <activity

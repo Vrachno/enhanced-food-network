@@ -9,7 +9,9 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -40,10 +42,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
 
         adapter = new SimpleCursorAdapter(this, R.layout.item_meal_type, null, FROM_COLUMNS, TO_IDS, 0);
 
