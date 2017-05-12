@@ -38,11 +38,26 @@
             android:textSize="20sp"
             tools:text="Pasta Pesto"/>
 
+        <TextView
+            android:id="@+id/tv_upvotes_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_meal_title"
+            android:text="Upvotes: "/>
+
+        <TextView
+            android:id="@+id/tv_meal_upvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_upvotes_header"
+            android:layout_toEndOf="@id/tv_upvotes_header"
+            android:layout_below="@id/tv_meal_title"/>
+
         <ImageView
             android:id="@+id/iv_meal_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_meal_title"/>
+            android:layout_below="@id/tv_meal_upvotes"/>
 
         <TextView
             android:id="@+id/tv_meal_recipe"

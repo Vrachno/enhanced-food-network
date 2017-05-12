@@ -48,6 +48,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     private long mealId;
 
     private TextView tvTitle;
+    private TextView tvUpvotes;
     private ImageView ivPreview;
     private TextView tvRecipe;
     private TextView tvNumberOfServings;
@@ -63,6 +64,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
 
         tvTitle = (TextView) findViewById(R.id.tv_meal_title);
+        tvUpvotes = (TextView) findViewById(R.id.tv_meal_upvotes);
         ivPreview = (ImageView) findViewById(R.id.iv_meal_preview);
         tvRecipe = (TextView) findViewById(R.id.tv_meal_recipe);
         tvNumberOfServings = (TextView) findViewById(R.id.tv_number_of_servings);
@@ -112,6 +114,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     private void updateView(Cursor cursor) {
         if (cursor != null && cursor.moveToFirst()) {
             tvTitle.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE)));
+            tvUpvotes.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES))));
             tvRecipe.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_RECIPE)));
             tvNumberOfServings.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS))));
 
