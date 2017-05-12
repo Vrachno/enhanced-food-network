@@ -18,6 +18,15 @@
         tools:text="Pasta Pesto"/>
 
     <TextView
+        android:id="@+id/tv_meal_upvotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_meal_title"
+        android:layout_toEndOf="@id/tv_meal_title"
+        android:layout_marginLeft="20dp"
+        android:layout_centerVertical="true"/>
+
+    <TextView
         android:id="@+id/tv_meal_prep_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

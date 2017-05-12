@@ -62,6 +62,7 @@ public class PushToServerService extends IntentService {
         while (cursor.moveToNext()) {
             final long mealDbId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal._ID));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE));
+            int upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
             String preview = cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREVIEW));
             String recipe = cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_RECIPE));
             int numberOfServings = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS));
@@ -70,7 +71,7 @@ public class PushToServerService extends IntentService {
 
             long mealTypeServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID));
 
-            executeRequest(MessageFormat.format(Constants.MEALS_URL, mealTypeServerId), Commons.ConnectionMethod.POST, new Gson().toJson(new Meal(title, preview, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId)), new Commons.ResponseCallback() {
+            executeRequest(MessageFormat.format(Constants.MEALS_URL, mealTypeServerId), Commons.ConnectionMethod.POST, new Gson().toJson(new Meal(title, upvotes, preview, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId)), new Commons.ResponseCallback() {
                 @Override
                 public void onResponse(int responseCode, String responsePayload) {
                     // responsePayload is the new ID of this club activity on the server

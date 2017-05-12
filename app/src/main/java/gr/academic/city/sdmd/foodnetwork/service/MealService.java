@@ -28,9 +28,14 @@ public class MealService extends IntentService {
     private static final String EXTRA_TITLE = "title";
     private static final String EXTRA_PREVIEW = "preview";
     private static final String EXTRA_RECIPE = "recipe";
+    private static final String EXTRA_UPVOTES = "upvotes";
     private static final String EXTRA_NUMBER_OF_SERVINGS = "number_of_servings";
     private static final String EXTRA_PREP_TIME_HOUR = "prep_time_hour";
     private static final String EXTRA_PREP_TIME_MINUTE = "prep_time_minute";
+
+    private static final String ACTION_UPVOTE_MEAL =  "gr.academic.city.sdmd.foodnetwork.UPVOTE_MEAL";
+    private static final String EXTRA_MEAL_SERVER_ID = "meal_server_id";
+
 
     public static void startFetchMeals(Context context, long mealTypeServerId) {
         Intent intent = new Intent(context, MealService.class);
@@ -63,7 +68,9 @@ public class MealService extends IntentService {
             fetchMeals(intent);
         } else if (ACTION_CREATE_MEAL.equals(intent.getAction())) {
             createMeal(intent);
-        } else {
+        } else if (ACTION_UPVOTE_MEAL.equals(intent.getAction())) {
+            upvoteMeal(intent);
+        }else {
             throw new UnsupportedOperationException("Action not supported: " + intent.getAction());
         }
     }
@@ -100,11 +107,12 @@ public class MealService extends IntentService {
         String title = intent.getStringExtra(EXTRA_TITLE);
         String preview = intent.getStringExtra(EXTRA_PREVIEW);
         String recipe = intent.getStringExtra(EXTRA_RECIPE);
+        int upvotes = intent.getIntExtra(EXTRA_UPVOTES, -1);
         int numberOfServings = intent.getIntExtra(EXTRA_NUMBER_OF_SERVINGS, -1);
         int prepTimeHour = intent.getIntExtra(EXTRA_PREP_TIME_HOUR, -1);
         int prepTimeMinute = intent.getIntExtra(EXTRA_PREP_TIME_MINUTE, -1);
 
-        ContentValues contentValues = new Meal(title, preview, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId).toContentValues();
+        ContentValues contentValues = new Meal(title, upvotes, preview, recipe,  numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId).toContentValues();
         contentValues.put(FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER, 0);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, -1);
 
@@ -115,4 +123,9 @@ public class MealService extends IntentService {
 
         sendBroadcast(new Intent(TriggerPushToServerBroadcastReceiver.ACTION_TRIGGER));
     }
+
+    private void upvoteMeal(Intent intent) {
+
+    }
+
 }

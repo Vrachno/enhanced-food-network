@@ -35,6 +35,7 @@ public final class FoodNetworkContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_PREVIEW = "preview";
         public static final String COLUMN_RECIPE = "recipe";
+        public static final String COLUMN_UPVOTES = "upvotes";
         public static final String COLUMN_NUMBER_OF_SERVINGS = "number_of_servings";
         public static final String COLUMN_PREP_TIME_HOUR = "prep_time_hour";
         public static final String COLUMN_PREP_TIME_MINUTE = "prep_time_minute";
