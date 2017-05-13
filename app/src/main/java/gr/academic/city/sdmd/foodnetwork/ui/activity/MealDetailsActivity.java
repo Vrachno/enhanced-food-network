@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -42,6 +44,12 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
 
     private static final int MEAL_LOADER = 20;
 
+    private static MealDetailsActivity ins;
+
+    public static MealDetailsActivity getInstance() {
+        return ins;
+    }
+
     public static Intent getStartIntent(Context context, long mealId, long mealServerId, long mealTypeServerId, String mealName) {
         Intent intent = new Intent(context, MealDetailsActivity.class);
         intent.putExtra(EXTRA_MEAL_ID, mealId);
@@ -69,6 +77,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ins = this;
 
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
         mealServerId = getIntent().getLongExtra(EXTRA_MEAL_SERVER_ID, -1);
@@ -154,9 +163,16 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         switch (item.getItemId()) {
             case R.id.action_upvote:
-                MealService.startUpvoteMeal(this, mealTypeServerId, mealServerId);
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    MealService.startUpvoteMeal(this, mealTypeServerId, mealServerId);
+                } else {
+                    Toast.makeText(this,getResources().getString(R.string.no_connectivity), Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -191,6 +207,16 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
             ivPreview.setImageBitmap(result);
         }
 
+    }
+
+    public void updateUpvotes (final String upvotes) {
+        MealDetailsActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView textUpvotes = (TextView) findViewById(R.id.tv_meal_upvotes);
+                textUpvotes.setText(upvotes);
+            }
+        });
     }
 }
 

@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.domain.Meal;
 import gr.academic.city.sdmd.foodnetwork.receiver.TriggerPushToServerBroadcastReceiver;
+import gr.academic.city.sdmd.foodnetwork.receiver.UpdateUpvoteBroadcastReceiver;
 import gr.academic.city.sdmd.foodnetwork.ui.activity.MealDetailsActivity;
 import gr.academic.city.sdmd.foodnetwork.util.Commons;
 import gr.academic.city.sdmd.foodnetwork.util.Constants;
@@ -108,6 +109,9 @@ public class MealService extends IntentService {
                         getContentResolver().insert(
                                 FoodNetworkContract.Meal.CONTENT_URI,
                                 contentValues);
+                    } else {
+                        ContentValues contentValues = meal.toContentValues();
+                        getContentResolver().update(FoodNetworkContract.Meal.CONTENT_URI, contentValues, FoodNetworkContract.Meal.COLUMN_SERVER_ID + "=" + meal.getServerId(), null);
                     }
                 }
             }
@@ -143,7 +147,9 @@ public class MealService extends IntentService {
         executeRequest(MessageFormat.format(Constants.MEAL_UPVOTE_URL, mealTypeServerId, mealServerId), Commons.ConnectionMethod.POST, null, new Commons.ResponseCallback() {
             @Override
             public void onResponse(int responseCode, String responsePayload) {
-
+                Intent intent = new Intent(UpdateUpvoteBroadcastReceiver.ACTION_UPVOTE);
+                intent.putExtra(String.valueOf(UpdateUpvoteBroadcastReceiver.EXTRA_UPVOTES), responsePayload);
+                sendBroadcast(intent);
             }
         });
 
