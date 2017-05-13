@@ -141,7 +141,7 @@ public class CreateMealActivity extends ToolbarActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 setPrepTime(hourOfDay, minute);
             }
-        }, prepTimeHour, prepTimeMinute, false);
+        }, prepTimeHour, prepTimeMinute, true);
 
         dialog.show();
     }

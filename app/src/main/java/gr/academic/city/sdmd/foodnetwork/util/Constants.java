@@ -10,4 +10,5 @@ public final class Constants {
     public static final String SERVER_URL = "http://clubs-sdmdcity.rhcloud.com/rest/";
     public static final String MEAL_TYPES_URL = SERVER_URL + "types";
     public static final String MEALS_URL = SERVER_URL + "types/{0}/meals";
+    public static final String MEAL_UPVOTE_URL = MEALS_URL + "/{1}/upvote";
 }

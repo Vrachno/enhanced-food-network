@@ -96,7 +96,7 @@ public class PushToServerService extends IntentService {
     }
 
     private void showNotification(long mealDbId) {
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, MealDetailsActivity.getStartIntent(this, mealDbId, null), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, MealDetailsActivity.getStartIntent(this, mealDbId, 0, 0, null), PendingIntent.FLAG_UPDATE_CURRENT);
 
         String text = getString(R.string.msg_meal_uploaded);
 

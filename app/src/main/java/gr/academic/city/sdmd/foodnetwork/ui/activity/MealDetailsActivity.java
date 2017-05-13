@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,7 @@ import java.util.Date;
 
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
+import gr.academic.city.sdmd.foodnetwork.service.MealService;
 
 
 /**
@@ -33,19 +36,25 @@ import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 public class MealDetailsActivity extends ToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String EXTRA_MEAL_ID = "meal_id";
+    private static final String EXTRA_MEAL_SERVER_ID = "meal_server_id";
     private static final String EXTRA_MEAL_NAME = "meal_name";
+    private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
 
     private static final int MEAL_LOADER = 20;
 
-    public static Intent getStartIntent(Context context, long mealId, String mealName) {
+    public static Intent getStartIntent(Context context, long mealId, long mealServerId, long mealTypeServerId, String mealName) {
         Intent intent = new Intent(context, MealDetailsActivity.class);
         intent.putExtra(EXTRA_MEAL_ID, mealId);
+        intent.putExtra(EXTRA_MEAL_SERVER_ID, mealServerId);
+        intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
         intent.putExtra(EXTRA_MEAL_NAME, mealName);
 
         return intent;
     }
 
     private long mealId;
+    private long mealServerId;
+    private long mealTypeServerId;
 
     private TextView tvTitle;
     private TextView tvUpvotes;
@@ -62,6 +71,8 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
         super.onCreate(savedInstanceState);
 
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
+        mealServerId = getIntent().getLongExtra(EXTRA_MEAL_SERVER_ID, -1);
+        mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
 
         tvTitle = (TextView) findViewById(R.id.tv_meal_title);
         tvUpvotes = (TextView) findViewById(R.id.tv_meal_upvotes);
@@ -145,6 +156,7 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_upvote:
+                MealService.startUpvoteMeal(this, mealTypeServerId, mealServerId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
