@@ -4,12 +4,15 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.text.MessageFormat;
 
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.domain.Meal;
 import gr.academic.city.sdmd.foodnetwork.receiver.TriggerPushToServerBroadcastReceiver;
+import gr.academic.city.sdmd.foodnetwork.ui.activity.MealDetailsActivity;
 import gr.academic.city.sdmd.foodnetwork.util.Commons;
 import gr.academic.city.sdmd.foodnetwork.util.Constants;
 import gr.academic.city.sdmd.foodnetwork.util.GsonResponseCallback;
@@ -54,6 +57,15 @@ public class MealService extends IntentService {
         intent.putExtra(EXTRA_NUMBER_OF_SERVINGS, numberOfServings);
         intent.putExtra(EXTRA_PREP_TIME_HOUR, prepTimeHour);
         intent.putExtra(EXTRA_PREP_TIME_MINUTE, prepTimeMinute);
+
+        context.startService(intent);
+    }
+
+    public static void startUpvoteMeal(Context context, long mealTypeServerId, long mealServerId){
+        Intent intent = new Intent(context, MealService.class);
+        intent.setAction(ACTION_UPVOTE_MEAL);
+        intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
+        intent.putExtra(EXTRA_MEAL_SERVER_ID, mealServerId);
 
         context.startService(intent);
     }
@@ -125,6 +137,15 @@ public class MealService extends IntentService {
     }
 
     private void upvoteMeal(Intent intent) {
+        long mealTypeServerId = intent.getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
+        long mealServerId = intent.getLongExtra(EXTRA_MEAL_SERVER_ID, -1);
+        Log.d("tag", "serverid: "+mealServerId);
+        executeRequest(MessageFormat.format(Constants.MEAL_UPVOTE_URL, mealTypeServerId, mealServerId), Commons.ConnectionMethod.POST, null, new Commons.ResponseCallback() {
+            @Override
+            public void onResponse(int responseCode, String responsePayload) {
+
+            }
+        });
 
     }
 

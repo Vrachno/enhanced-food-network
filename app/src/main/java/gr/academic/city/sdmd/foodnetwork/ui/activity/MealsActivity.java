@@ -35,7 +35,9 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
             FoodNetworkContract.Meal.COLUMN_TITLE,
             FoodNetworkContract.Meal.COLUMN_UPVOTES,
             FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE
+            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE,
+            FoodNetworkContract.Meal.COLUMN_SERVER_ID,
+            FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID
     };
 
     private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_CREATED_AT + " DESC";
@@ -107,6 +109,8 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
                 if (cursor.moveToPosition(position)) {
                     startActivity(MealDetailsActivity.getStartIntent(MealsActivity.this,
                             id,
+                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID)),
+                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID)),
                             cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE))));
                 }
             }
