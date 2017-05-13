@@ -40,7 +40,7 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
             FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID
     };
 
-    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_CREATED_AT + " DESC";
+    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_UPVOTES + " DESC";
 
     private static final int MEALS_LOADER = 10;
 
@@ -202,5 +202,11 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        new FetchMealsAsyncTask().doInBackground(mealTypeServerId);
     }
 }

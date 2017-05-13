@@ -17,4 +17,8 @@
     <string name="create_meal_title">Add new recipe</string>
     <string name="action_add_meal">Add Meal</string>
     <string name="action_upvote">Upvote</string>
+    <string name="no_connectivity">Sorry, no internet connection :(</string>
+    <string name="prep_time_hint">Preparation Time</string>
+    <string name="message">Share your recipes with the world</string>
+    <string name="no_of_servings_hint">Number of Servings</string>
 </resources>
