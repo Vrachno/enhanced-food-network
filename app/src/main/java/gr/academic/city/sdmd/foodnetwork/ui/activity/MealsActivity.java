@@ -207,6 +207,6 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
     @Override
     public void onResume(){
         super.onResume();
-        new FetchMealsAsyncTask().doInBackground(mealTypeServerId);
+        new FetchMealsAsyncTask().execute(mealTypeServerId);
     }
 }

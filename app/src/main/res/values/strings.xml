@@ -21,4 +21,6 @@
     <string name="prep_time_hint">Preparation Time</string>
     <string name="message">Share your recipes with the world</string>
     <string name="no_of_servings_hint">Number of Servings</string>
+    <string name="snackbar_message">Recipe upvoted!</string>
+    <string name="undo">UNDO</string>
 </resources>

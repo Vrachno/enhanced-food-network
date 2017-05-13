@@ -6,16 +6,20 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -164,12 +168,33 @@ public class MealDetailsActivity extends ToolbarActivity implements LoaderManage
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ConnectivityManager connMgr = (ConnectivityManager)
-                this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        final Handler handler = new Handler();
         switch (item.getItemId()) {
             case R.id.action_upvote:
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    MealService.startUpvoteMeal(this, mealTypeServerId, mealServerId);
+                    final int previousUpvotes = Integer.parseInt(tvUpvotes.getText().toString());
+                    tvUpvotes.setText(String.valueOf(previousUpvotes + 1));
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MealService.startUpvoteMeal(MealDetailsActivity.this, mealTypeServerId, mealServerId);
+                        }
+                    }, 3000);
+
+                    Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_layout),
+                            getResources().getString(R.string.snackbar_message), 3000).setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            handler.removeCallbacksAndMessages(null);
+                            updateUpvotes(String.valueOf(previousUpvotes));
+                        }
+                    });
+                    snackbar.setActionTextColor(Color.RED);
+                    TextView message = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                    message.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    snackbar.show();
                 } else {
                     Toast.makeText(this,getResources().getString(R.string.no_connectivity), Toast.LENGTH_LONG).show();
                 }
