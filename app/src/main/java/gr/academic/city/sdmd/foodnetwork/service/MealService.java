@@ -149,6 +149,7 @@ public class MealService extends IntentService {
             public void onResponse(int responseCode, String responsePayload) {
                 Intent intent = new Intent(UpdateUpvoteBroadcastReceiver.ACTION_UPVOTE);
                 intent.putExtra(String.valueOf(UpdateUpvoteBroadcastReceiver.EXTRA_UPVOTES), responsePayload);
+                //in case the user navigates back and forth to the details page, the upvotes will update
                 sendBroadcast(intent);
             }
         });

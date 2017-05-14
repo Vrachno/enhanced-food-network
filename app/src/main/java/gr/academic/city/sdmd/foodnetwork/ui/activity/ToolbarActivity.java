@@ -20,9 +20,9 @@ import gr.academic.city.sdmd.foodnetwork.R;
 public abstract class ToolbarActivity extends AppCompatActivity {
 
 
-    String ExternalFontPath;
-    Typeface FontLoaderTypeface;
-    TextView textViewNewFont;
+    private String ExternalFontPath;
+    private Typeface FontLoaderTypeface;
+    private TextView textViewNewFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,6 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle(getCustomTitle());
 
         textViewNewFont = new TextView(this);
         RelativeLayout.LayoutParams layoutparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

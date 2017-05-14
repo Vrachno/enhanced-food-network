@@ -21,38 +21,30 @@ import android.widget.TextView;
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.service.MealService;
+import gr.academic.city.sdmd.foodnetwork.ui.fragment.MealsListFragment;
 
 /**
  * Created by trumpets on 4/24/17.
  */
-public class MealsActivity extends ToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MealsActivity extends ToolbarActivity  {
 
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
     private static final String EXTRA_MEAL_TYPE_NAME = "meal_type_title";
 
-    private static final String[] PROJECTION = {
-            FoodNetworkContract.Meal._ID,
-            FoodNetworkContract.Meal.COLUMN_TITLE,
-            FoodNetworkContract.Meal.COLUMN_UPVOTES,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE,
-            FoodNetworkContract.Meal.COLUMN_SERVER_ID,
-            FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID
-    };
 
-    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_UPVOTES + " DESC";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (findViewById(R.id.poutses)!= null) {
+            Long sid = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0);
+            System.out.print(sid);
+        }
+        MealsListFragment mealsListFragment = MealsListFragment.newInstance(getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0));
+        Bundle extras = getIntent().getExtras();
+        mealsListFragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.frag_meals_list_container, mealsListFragment).commit();
 
-    private static final int MEALS_LOADER = 10;
-
-    private final static String[] FROM_COLUMNS = {
-            FoodNetworkContract.Meal.COLUMN_TITLE,
-            FoodNetworkContract.Meal.COLUMN_UPVOTES,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,};
-
-    private final static int[] TO_IDS = {
-            R.id.tv_meal_title,
-            R.id.tv_meal_upvotes,
-            R.id.tv_meal_prep_time};
+    }
 
     public static Intent getStartIntent(Context context, long mealTypeServerId, String mealTypeTitle) {
         Intent intent = new Intent(context, MealsActivity.class);
@@ -60,65 +52,6 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
         intent.putExtra(EXTRA_MEAL_TYPE_NAME, mealTypeTitle);
 
         return intent;
-    }
-
-    private long mealTypeServerId;
-    private CursorAdapter adapter;
-
-    private SwipeRefreshLayout swipeRefreshLayout;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initiateMealsRefresh();
-            }
-        });
-
-        adapter = new SimpleCursorAdapter(this, R.layout.item_meal, null, FROM_COLUMNS, TO_IDS, 0);
-        ((SimpleCursorAdapter) adapter).setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                if (columnIndex == cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR) && view instanceof TextView) {
-                    // we have to build a human readable string of prep time
-
-                    TextView textView = (TextView) view;
-                    textView.setText(getString(
-                            R.string.prep_time_w_placeholder,
-                            cursor.getInt(columnIndex),  // we know this is prep time hour
-                            cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE))));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        ListView resultsListView = (ListView) findViewById(android.R.id.list);
-        resultsListView.setAdapter(adapter);
-        resultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = adapter.getCursor();
-                if (cursor.moveToPosition(position)) {
-                    startActivity(MealDetailsActivity.getStartIntent(MealsActivity.this,
-                            id,
-                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID)),
-                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE))));
-                }
-            }
-        });
-
-        getSupportLoaderManager().initLoader(MEALS_LOADER, null, this);
-
-        MealService.startFetchMeals(this, mealTypeServerId);
     }
 
     @Override
@@ -132,81 +65,9 @@ public class MealsActivity extends ToolbarActivity implements LoaderManager.Load
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case MEALS_LOADER:
-                return new CursorLoader(this,
-                        FoodNetworkContract.Meal.CONTENT_URI,
-                        PROJECTION,
-                        FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID + " = ?",
-                        new String[]{String.valueOf(mealTypeServerId)},
-                        SORT_ORDER
-                );
-
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.changeCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.changeCursor(null);
-    }
-
-    private void initiateMealsRefresh() {
-        if (!swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(true);
-        }
-
-        new FetchMealsAsyncTask().execute(mealTypeServerId);
-    }
-
-    private class FetchMealsAsyncTask extends AsyncTask<Long, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Long... params) {
-            MealService.startFetchMeals(MealsActivity.this, params[0]);
-
-            try {
-                // giving the service ample time to finish
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_meals_menu, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_meal:
-                startActivity(CreateMealActivity.getStartIntent(MealsActivity.this, mealTypeServerId));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        new FetchMealsAsyncTask().execute(mealTypeServerId);
-    }
 }
