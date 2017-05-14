@@ -65,6 +65,7 @@ public class MealsActivity extends ToolbarActivity implements MealsListFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_meals_menu, menu);
+        menu.findItem(R.id.action_upvote).setVisible(false);
         return true;
     }
 
@@ -74,6 +75,8 @@ public class MealsActivity extends ToolbarActivity implements MealsListFragment.
             case R.id.action_add_meal:
                 startActivity(CreateMealActivity.getStartIntent(this, getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0)));
                 return true;
+            case R.id.action_upvote:
+
             default:
                 return super.onOptionsItemSelected(item);
         }

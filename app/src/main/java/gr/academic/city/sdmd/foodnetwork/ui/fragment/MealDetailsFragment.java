@@ -1,21 +1,29 @@
 package gr.academic.city.sdmd.foodnetwork.ui.fragment;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +34,7 @@ import java.util.Date;
 
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
+import gr.academic.city.sdmd.foodnetwork.service.MealService;
 import gr.academic.city.sdmd.foodnetwork.ui.activity.MealDetailsActivity;
 
 /**
@@ -184,4 +193,44 @@ public class MealDetailsFragment extends Fragment implements LoaderManager.Loade
         }
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        final Handler handler = new Handler();
+        switch (item.getItemId()) {
+            case R.id.action_upvote:
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    final int previousUpvotes = Integer.parseInt(tvUpvotes.getText().toString());
+                    tvUpvotes.setText(String.valueOf(previousUpvotes + 1));
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MealService.startUpvoteMeal(getActivity(), mealTypeServerId, mealServerId);
+                        }
+                    }, 3000);
+
+                    Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout),
+                            getResources().getString(R.string.snackbar_message), 3000).setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            handler.removeCallbacksAndMessages(null);
+                            MealDetailsActivity.getInstance().updateUpvotes(String.valueOf(previousUpvotes));
+                        }
+                    });
+                    snackbar.setActionTextColor(Color.RED);
+                    TextView message = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                    message.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    snackbar.show();
+                } else {
+                    Toast.makeText(getActivity(),getResources().getString(R.string.no_connectivity), Toast.LENGTH_LONG).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
