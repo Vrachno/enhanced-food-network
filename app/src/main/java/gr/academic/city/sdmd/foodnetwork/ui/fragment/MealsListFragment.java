@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -37,10 +39,15 @@ import gr.academic.city.sdmd.foodnetwork.ui.activity.MealsActivity;
  * Created by Vrachno on 13/5/2017.
  */
 
-public class MealsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MealsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String ARG_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
-    private static final String ARG_MEAL_TYPE_NAME = "meal_type_title";
+
+    public interface OnFragmentInteractionListener {
+        void onMealSelected(int mealLocationInList, Cursor cursor, long id);
+    }
+
+    private OnFragmentInteractionListener mListener;
 
     private static final String[] PROJECTION = {
             FoodNetworkContract.Meal._ID,
@@ -131,32 +138,21 @@ public class MealsListFragment extends ListFragment implements LoaderManager.Loa
             }
         });
 
+
         ListView resultsListView = (ListView) getActivity().findViewById(android.R.id.list);
         resultsListView.setAdapter(adapter);
         resultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adapter.notifyDataSetChanged();
                 Cursor cursor = adapter.getCursor();
-                if (cursor.moveToPosition(position)) {
-                    startActivity(MealDetailsActivity.getStartIntent(getActivity(),
-                            id,
-                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID)),
-                            cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID)),
-                            cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE))));
-                }
+                mListener.onMealSelected(position, cursor, id);
             }
         });
 
         getActivity().getSupportLoaderManager().initLoader(MEALS_LOADER, null, this);
 
         MealService.startFetchMeals(getActivity(), mealTypeServerId);
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
 
     }
 
@@ -216,22 +212,26 @@ public class MealsListFragment extends ListFragment implements LoaderManager.Loa
         }
     }
 
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_meal:
-                startActivity(CreateMealActivity.getStartIntent(getActivity(), mealTypeServerId));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     public void onResume(){
         super.onResume();
         new FetchMealsAsyncTask().execute(mealTypeServerId);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 }

@@ -15,17 +15,15 @@
         android:layout_height="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_below="@id/app_bar">
-
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/poutses"
+        android:id="@+id/frag_meal_details_dual_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"
         android:layout_toEndOf="@id/frag_meals_list_container"
         android:layout_toRightOf="@id/frag_meals_list_container">
-
     </FrameLayout>
 
 </RelativeLayout>

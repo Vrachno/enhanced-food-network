@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -21,12 +22,13 @@ import android.widget.TextView;
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.service.MealService;
+import gr.academic.city.sdmd.foodnetwork.ui.fragment.MealDetailsFragment;
 import gr.academic.city.sdmd.foodnetwork.ui.fragment.MealsListFragment;
 
 /**
  * Created by trumpets on 4/24/17.
  */
-public class MealsActivity extends ToolbarActivity  {
+public class MealsActivity extends ToolbarActivity implements MealsListFragment.OnFragmentInteractionListener {
 
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
     private static final String EXTRA_MEAL_TYPE_NAME = "meal_type_title";
@@ -35,12 +37,8 @@ public class MealsActivity extends ToolbarActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (findViewById(R.id.poutses)!= null) {
-            Long sid = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0);
-            System.out.print(sid);
-        }
+
         MealsListFragment mealsListFragment = MealsListFragment.newInstance(getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0));
-        Bundle extras = getIntent().getExtras();
         mealsListFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.frag_meals_list_container, mealsListFragment).commit();
 
@@ -70,4 +68,33 @@ public class MealsActivity extends ToolbarActivity  {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_meal:
+                startActivity(CreateMealActivity.getStartIntent(this, getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0)));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onMealSelected(int mealLocationInList, Cursor cursor, long id) {
+        View fragmentContainer = findViewById(R.id.frag_meal_details_dual_panel);
+        boolean isDualPane = fragmentContainer != null &&
+                fragmentContainer.getVisibility() == View.VISIBLE;
+        if (cursor.moveToPosition(mealLocationInList)) {
+            Long mealServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID));
+            Long mealTypeServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID));
+            String mealName =  cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE));
+            if (isDualPane) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frag_meal_details_dual_panel, MealDetailsFragment.newInstance(id, mealServerId, mealName, mealTypeServerId), "Tag");
+                fragmentTransaction.commit();
+            } else {
+                startActivity(MealDetailsActivity.getStartIntent(this, id,mealServerId,  mealTypeServerId, mealName));
+            }
+        }
+    }
 }
