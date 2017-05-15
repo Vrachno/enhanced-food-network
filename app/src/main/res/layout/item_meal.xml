@@ -1,40 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tv_meal_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        tools:text="Pasta Pesto"/>
-
-    <TextView
-        android:id="@+id/tv_meal_upvotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tv_meal_title"
-        android:layout_toEndOf="@id/tv_meal_title"
-        android:layout_marginLeft="20dp"
-        android:layout_centerVertical="true"/>
-
-    <TextView
-        android:id="@+id/tv_meal_prep_time"
+    <ImageView
+        android:id="@+id/right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        tools:text="0:20"/>
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_right_arrow" />
+
+    <TextView
+        android:id="@+id/tv_meal_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingTop="5dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/tv_meal_upvotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_meal_title"
+        android:layout_toRightOf="@id/tv_meal_title"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:textSize="25sp"
+        android:typeface="sans" />
+
+    <ImageView
+        android:id="@+id/upvote_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_meal_upvotes"
+        android:layout_toEndOf="@id/tv_meal_upvotes"
+        android:paddingTop="5dp"
+        android:src="@drawable/ic_action_upvote_yellow" />
+
+    <TextView
+        android:id="@+id/prep_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/tv_meal_title"
+        android:paddingTop="5dp"
+        android:text="@string/prep_time_label" />
+
+    <TextView
+        android:id="@+id/tv_meal_prep_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_meal_title"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@id/prep_time_label"
+        android:layout_toRightOf="@id/prep_time_label"
+        android:paddingTop="5dp"
+        tools:text="0:20" />
 
 </RelativeLayout>

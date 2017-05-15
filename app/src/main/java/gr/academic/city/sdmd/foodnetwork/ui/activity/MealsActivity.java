@@ -74,7 +74,7 @@ public class MealsActivity extends ToolbarActivity implements MealsListFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_meal:
-                startActivity(CreateMealActivity.getStartIntent(this, getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0)));
+                startActivity(CreateMealActivity.getStartIntent(this, getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, 0), getIntent().getStringExtra(EXTRA_MEAL_TYPE_NAME)));
                 return true;
             case R.id.action_upvote:
 
