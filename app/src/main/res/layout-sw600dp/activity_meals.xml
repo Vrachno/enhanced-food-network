@@ -16,7 +16,7 @@
         android:id="@+id/frag_meals_list_container"
         android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
-        app:layout_widthPercent="30%"></FrameLayout>
+        app:layout_widthPercent="40%"/>
 
     <FrameLayout
         android:id="@+id/frag_meal_details_dual_panel"
@@ -28,6 +28,6 @@
         android:layout_marginRight="200dp"
         android:layout_marginStart="200dp"
         android:layout_toEndOf="@id/frag_meals_list_container"
-        android:layout_toRightOf="@id/frag_meals_list_container"></FrameLayout>
+        android:layout_toRightOf="@id/frag_meals_list_container"/>
 
 </android.support.percent.PercentRelativeLayout>
