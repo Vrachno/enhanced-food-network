@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,12 +22,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
@@ -39,7 +45,7 @@ import gr.academic.city.sdmd.foodnetwork.ui.activity.MealsActivity;
  * Created by Vrachno on 13/5/2017.
  */
 
-public class MealsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MealsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
 
@@ -74,7 +80,6 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
             R.id.tv_meal_prep_time};
 
 
-
     private long mealTypeServerId;
     private CursorAdapter adapter;
 
@@ -88,13 +93,14 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         return fragment;
     }
 
-    public MealsListFragment(){
+    public MealsListFragment() {
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -104,11 +110,13 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments()!=null)
+        if (getArguments() != null)
             this.mealTypeServerId = getArguments().getLong(ARG_MEAL_TYPE_SERVER_ID);
 
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh);
@@ -213,9 +221,15 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        new FetchMealsAsyncTask().execute(mealTypeServerId);
+        startTimer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
     }
 
     @Override
@@ -234,4 +248,29 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         super.onDetach();
         mListener = null;
     }
+
+
+    Timer timer;
+    TimerTask timerTask;
+
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 2000, 2000);
+    }
+
+    public void stopTimer(){
+            timer.cancel();
+    }
+
+    public void initializeTimerTask(){
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+               new FetchMealsAsyncTask().execute(mealTypeServerId);
+            }
+        };
+    }
+
+
 }

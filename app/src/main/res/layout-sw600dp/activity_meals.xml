@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context="gr.academic.city.sdmd.foodnetwork.ui.activity.MealsActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <FrameLayout android:id="@+id/frag_meals_list_container"
-        android:layout_width="400dp"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frag_meals_list_container"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_below="@id/app_bar">
-    </FrameLayout>
+        android:layout_below="@id/app_bar"
+        app:layout_widthPercent="40%"/>
 
     <FrameLayout
         android:id="@+id/frag_meal_details_dual_panel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
+        android:layout_marginEnd="200dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginRight="200dp"
+        android:layout_marginStart="200dp"
         android:layout_toEndOf="@id/frag_meals_list_container"
-        android:layout_toRightOf="@id/frag_meals_list_container">
-    </FrameLayout>
+        android:layout_toRightOf="@id/frag_meals_list_container"/>
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

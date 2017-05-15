@@ -5,4 +5,9 @@
         android:icon="@drawable/ic_action_add_meal"
         android:title="@string/action_add_meal"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_upvote"
+        android:icon="@drawable/ic_action_upvote"
+        android:title="@string/action_upvote"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -1,5 +1,6 @@
 package gr.academic.city.sdmd.foodnetwork.ui.activity;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -78,7 +80,7 @@ public class MealDetailsActivity extends ToolbarActivity {
 
         MealDetailsFragment mealDetailsFragment = MealDetailsFragment.newInstance(mealId, mealServerId, mealName, mealTypeServerId);
         mealDetailsFragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.frag_meal_details_container, mealDetailsFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frag_meal_details_container, mealDetailsFragment, "mealDetails").commit();
     }
 
     @Override
@@ -99,55 +101,14 @@ public class MealDetailsActivity extends ToolbarActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        ConnectivityManager connMgr = (ConnectivityManager)
-//        this.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-//        final Handler handler = new Handler();
-//        switch (item.getItemId()) {
-//            case R.id.action_upvote:
-//                if (networkInfo != null && networkInfo.isConnected()) {
-//                    final int previousUpvotes = Integer.parseInt(tvUpvotes.getText().toString());
-//                    tvUpvotes.setText(String.valueOf(previousUpvotes + 1));
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            MealService.startUpvoteMeal(MealDetailsActivity.this, mealTypeServerId, mealServerId);
-//                        }
-//                    }, 3000);
-//
-//                    Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_layout),
-//                            getResources().getString(R.string.snackbar_message), 3000).setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            handler.removeCallbacksAndMessages(null);
-//                            updateUpvotes(String.valueOf(previousUpvotes));
-//                        }
-//                    });
-//                    snackbar.setActionTextColor(Color.RED);
-//                    TextView message = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-//                    message.setTextColor(getResources().getColor(R.color.colorPrimary));
-//                    snackbar.show();
-//                } else {
-//                    Toast.makeText(this,getResources().getString(R.string.no_connectivity), Toast.LENGTH_LONG).show();
-//                }
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-
-
-    public void updateUpvotes (final String upvotes) {
-        MealDetailsActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView textUpvotes = (TextView) findViewById(R.id.tv_meal_upvotes);
-                textUpvotes.setText(upvotes);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_upvote:
+                return false;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

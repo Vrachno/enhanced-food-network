@@ -23,10 +23,12 @@ import gr.academic.city.sdmd.foodnetwork.service.MealService;
 public class CreateMealActivity extends ToolbarActivity {
 
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
+    private static final String EXTRA_MEAL_TYPE_NAME = "meal_type_title";
 
-    public static Intent getStartIntent(Context context, long mealTypeServerId) {
+    public static Intent getStartIntent(Context context, long mealTypeServerId, String mealTypeName) {
         Intent intent = new Intent(context, CreateMealActivity.class);
         intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
+        intent.putExtra(EXTRA_MEAL_TYPE_NAME, mealTypeName);
 
         return intent;
     }
@@ -92,7 +94,7 @@ public class CreateMealActivity extends ToolbarActivity {
 
     @Override
     protected String getCustomTitle() {
-        return getResources().getString(R.string.create_meal_title) ;
+        return "Add " + getIntent().getStringExtra(EXTRA_MEAL_TYPE_NAME).toUpperCase() + " Recipe";
     }
 
     private void saveNewMeal() {
