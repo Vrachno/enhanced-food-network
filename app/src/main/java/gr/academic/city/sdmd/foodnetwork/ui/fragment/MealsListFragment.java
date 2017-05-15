@@ -39,7 +39,7 @@ import gr.academic.city.sdmd.foodnetwork.ui.activity.MealsActivity;
  * Created by Vrachno on 13/5/2017.
  */
 
-public class MealsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MealsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
 
@@ -74,7 +74,6 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
             R.id.tv_meal_prep_time};
 
 
-
     private long mealTypeServerId;
     private CursorAdapter adapter;
 
@@ -88,7 +87,7 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         return fragment;
     }
 
-    public MealsListFragment(){
+    public MealsListFragment() {
 
     }
 
@@ -108,7 +107,7 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments()!=null)
+        if (getArguments() != null)
             this.mealTypeServerId = getArguments().getLong(ARG_MEAL_TYPE_SERVER_ID);
 
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh);
@@ -213,7 +212,7 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         new FetchMealsAsyncTask().execute(mealTypeServerId);
     }

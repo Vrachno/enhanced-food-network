@@ -1,118 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/coordinator_layout"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/tv_meal_creation_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                tools:text="24/05/2017"/>
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tv_meal_title_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/tv_meal_creation_date"
-                android:layout_toStartOf="@id/tv_meal_creation_date"
-                android:textSize="20sp"
-                tools:text="Pasta Pesto"/>
-
-            <TextView
-                android:id="@+id/tv_upvotes_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_meal_title_details"
-                android:text="Upvotes: "/>
-
-            <TextView
-                android:id="@+id/tv_meal_upvotes_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_upvotes_header"
-                android:layout_toEndOf="@id/tv_upvotes_header"
-                android:layout_below="@id/tv_meal_title_details"/>
+                android:layout_below="@id/app_bar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
 
             <ImageView
                 android:id="@+id/iv_meal_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_meal_upvotes_details"/>
+                android:layout_below="@id/tv_meal_title_details"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
 
-            <TextView
-                android:id="@+id/tv_meal_recipe"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/details"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_meal_preview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:padding="5dp"
-                tools:text="Just order in, it's easier."/>
+                android:background="@drawable/border">
 
-            <TextView
-                android:id="@+id/tv_number_of_servings_header"
+                <TextView
+                    android:id="@+id/tv_number_of_servings_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:padding="10dp"
+                    android:text="@string/no_of_servings"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_number_of_servings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_number_of_servings_header"
+                    android:layout_toRightOf="@id/tv_number_of_servings_header"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/servings_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_number_of_servings"
+                    android:layout_toRightOf="@id/tv_number_of_servings"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/ic_servings" />
+
+                <TextView
+                    android:id="@+id/tv_prep_time_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/servings_img"
+                    android:padding="10dp"
+                    android:text="@string/prep_time_hint"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_prep_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/servings_img"
+                    android:layout_toEndOf="@id/tv_prep_time_header"
+                    android:layout_toRightOf="@id/tv_prep_time_header"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="0:10" />
+
+                <ImageView
+                    android:id="@+id/prep_time_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/servings_img"
+                    android:layout_toEndOf="@id/tv_prep_time"
+                    android:layout_toRightOf="@id/tv_prep_time"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="6dp"
+                    android:src="@drawable/ic_time" />
+
+
+                <TextView
+                    android:id="@+id/tv_upvotes_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/tv_prep_time"
+                    android:padding="10dp"
+                    android:text="Upvotes: "
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_meal_upvotes_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_prep_time"
+                    android:layout_toEndOf="@id/tv_upvotes_header"
+                    android:layout_toRightOf="@id/tv_upvotes_header"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="0dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/upvote_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/prep_time_img"
+                    android:layout_toEndOf="@id/tv_meal_upvotes_details"
+                    android:layout_toRightOf="@id/tv_meal_upvotes_details"
+                    android:src="@drawable/ic_action_upvote" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/recipe_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_meal_recipe"
+                android:layout_below="@+id/details"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="@string/number_of_servings"/>
-
-            <TextView
-                android:id="@+id/tv_number_of_servings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_number_of_servings_header"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_toEndOf="@id/tv_number_of_servings_header"
-                android:layout_toRightOf="@id/tv_number_of_servings_header"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:text="2"/>
+                android:background="@drawable/border">
+
+                <TextView
+                    android:id="@+id/recipe_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/recipe"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_meal_recipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/recipe_label"
+                    android:layout_centerHorizontal="true"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/tv_prep_time_header"
+                android:id="@+id/created_at_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_number_of_servings_header"
-                android:layout_marginTop="10dp"
-                android:text="@string/prep_time"/>
+                android:layout_below="@id/recipe_layout"
+                android:layout_centerHorizontal="true"
+                android:text="@string/created_at" />
 
             <TextView
-                android:id="@+id/tv_prep_time"
+                android:id="@+id/tv_meal_creation_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_prep_time_header"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@id/tv_prep_time_header"
-                android:layout_toRightOf="@id/tv_prep_time_header"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:text="0:10"/>
-
+                android:layout_below="@+id/created_at_label"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
-
     </ScrollView>
-
 </android.support.design.widget.CoordinatorLayout>
