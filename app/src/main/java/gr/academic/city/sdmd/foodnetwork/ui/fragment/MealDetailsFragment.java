@@ -234,7 +234,7 @@ public class MealDetailsFragment extends Fragment implements LoaderManager.Loade
                         public void run() {
                             MealService.startUpvoteMeal(activity, mealTypeServerId, mealServerId);
                         }
-                    }, 10000);
+                    }, 3000);
                     Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout),
                             getResources().getString(R.string.snackbar_message), 3000).setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                         @Override

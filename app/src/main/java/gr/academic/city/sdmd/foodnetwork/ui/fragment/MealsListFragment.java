@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +28,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gr.academic.city.sdmd.foodnetwork.R;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
@@ -214,7 +218,7 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onResume() {
         super.onResume();
-        new FetchMealsAsyncTask().execute(mealTypeServerId);
+        startTimer();
     }
 
     @Override
@@ -233,4 +237,25 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         super.onDetach();
         mListener = null;
     }
+
+
+    Timer timer;
+    TimerTask timerTask;
+
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 3000, 3000);
+    }
+
+    public void initializeTimerTask(){
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                new FetchMealsAsyncTask().execute(mealTypeServerId);
+            }
+        };
+    }
+
+
 }
