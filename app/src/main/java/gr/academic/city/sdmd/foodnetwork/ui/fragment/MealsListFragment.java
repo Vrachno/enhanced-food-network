@@ -222,6 +222,12 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -246,6 +252,10 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         timer = new Timer();
         initializeTimerTask();
         timer.schedule(timerTask, 3000, 3000);
+    }
+
+    public void stopTimer(){
+        timer.cancel();
     }
 
     public void initializeTimerTask(){
