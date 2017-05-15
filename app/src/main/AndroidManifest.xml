@@ -73,12 +73,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.UpdateUpvoteBroadcastReceiver">
-            <intent-filter>
-                <action android:name="gr.academic.city.sdmd.foodnetwork.UPVOTE"/>
-            </intent-filter>
-        </receiver>
-
         <provider
             android:name=".db.FoodNetworkContentProvider"
             android:authorities="gr.academic.city.sdsm.foodnetwork"

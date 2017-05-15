@@ -65,7 +65,8 @@ public class MealsActivity extends ToolbarActivity implements MealsListFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_meals_menu, menu);
-        menu.findItem(R.id.action_upvote).setVisible(false);
+        if (findViewById(R.id.frag_meal_details_dual_panel) == null)
+            menu.findItem(R.id.action_upvote).setVisible(false);
         return true;
     }
 

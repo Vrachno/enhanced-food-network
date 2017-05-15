@@ -1,5 +1,6 @@
 package gr.academic.city.sdmd.foodnetwork.ui.activity;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -78,7 +80,7 @@ public class MealDetailsActivity extends ToolbarActivity {
 
         MealDetailsFragment mealDetailsFragment = MealDetailsFragment.newInstance(mealId, mealServerId, mealName, mealTypeServerId);
         mealDetailsFragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.frag_meal_details_container, mealDetailsFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frag_meal_details_container, mealDetailsFragment, "mealDetails").commit();
     }
 
     @Override
@@ -99,15 +101,14 @@ public class MealDetailsActivity extends ToolbarActivity {
         return true;
     }
 
-
-    public void updateUpvotes (final String upvotes) {
-        MealDetailsActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView textUpvotes = (TextView) findViewById(R.id.tv_meal_upvotes);
-                textUpvotes.setText(upvotes);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_upvote:
+                return false;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 
