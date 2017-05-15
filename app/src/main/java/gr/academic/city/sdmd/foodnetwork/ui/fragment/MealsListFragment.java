@@ -22,12 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -98,6 +100,7 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -106,6 +109,8 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
         return inflater.inflate(R.layout.fragment_meals_list, container, false);
 
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -251,18 +256,18 @@ public class MealsListFragment extends Fragment implements LoaderManager.LoaderC
     public void startTimer() {
         timer = new Timer();
         initializeTimerTask();
-        timer.schedule(timerTask, 3000, 3000);
+        timer.schedule(timerTask, 2000, 2000);
     }
 
     public void stopTimer(){
-        timer.cancel();
+            timer.cancel();
     }
 
     public void initializeTimerTask(){
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                new FetchMealsAsyncTask().execute(mealTypeServerId);
+               new FetchMealsAsyncTask().execute(mealTypeServerId);
             }
         };
     }

@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.text.MessageFormat;
 
@@ -75,10 +76,11 @@ public class PushToServerService extends IntentService {
                 @Override
                 public void onResponse(int responseCode, String responsePayload) {
                     // responsePayload is the new ID of this club activity on the server
+                    JsonObject obj = new Gson().fromJson(responsePayload, JsonObject.class);
 
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER, 1);
-                    contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, responsePayload);
+                    contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, obj.get("id").toString());
 
                     getContentResolver().update(
                             ContentUris.withAppendedId(FoodNetworkContract.Meal.CONTENT_URI, mealDbId),

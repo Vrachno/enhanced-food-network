@@ -21,7 +21,7 @@
     <FrameLayout
         android:id="@+id/frag_meal_details_dual_panel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
         android:layout_marginEnd="200dp"
         android:layout_marginLeft="200dp"

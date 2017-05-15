@@ -119,7 +119,7 @@ public class MealService extends IntentService {
         String title = intent.getStringExtra(EXTRA_TITLE);
         String preview = intent.getStringExtra(EXTRA_PREVIEW);
         String recipe = intent.getStringExtra(EXTRA_RECIPE);
-        int upvotes = intent.getIntExtra(EXTRA_UPVOTES, -1);
+        int upvotes = intent.getIntExtra(EXTRA_UPVOTES, 0);
         int numberOfServings = intent.getIntExtra(EXTRA_NUMBER_OF_SERVINGS, -1);
         int prepTimeHour = intent.getIntExtra(EXTRA_PREP_TIME_HOUR, -1);
         int prepTimeMinute = intent.getIntExtra(EXTRA_PREP_TIME_MINUTE, -1);

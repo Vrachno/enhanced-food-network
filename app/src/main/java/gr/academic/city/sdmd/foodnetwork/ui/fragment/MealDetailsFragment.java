@@ -19,6 +19,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,17 +88,11 @@ public class MealDetailsFragment extends Fragment implements LoaderManager.Loade
         return fragment;
     }
 
-    private static MealDetailsFragment ins;
-
-    public static MealDetailsFragment getInstance() {
-        return ins;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ins = this;
 
     }
 
@@ -125,6 +121,13 @@ public class MealDetailsFragment extends Fragment implements LoaderManager.Loade
         getActivity().getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if (getArguments()!=null)
+            menu.findItem(R.id.action_upvote).setVisible(true);
     }
 
     @Override
@@ -233,6 +236,7 @@ public class MealDetailsFragment extends Fragment implements LoaderManager.Loade
                         @Override
                         public void run() {
                             MealService.startUpvoteMeal(activity, mealTypeServerId, mealServerId);
+                            isUpvotePressed = false;
                         }
                     }, 3000);
                     Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout),
